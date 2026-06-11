@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Management System</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+
+  <!-- ======== HEADER ======== -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <i class="fas fa-graduation-cap"></i>
+        <span>StudentHub</span>
+      </div>
+      <nav class="nav">
+        <button class="nav-btn active" data-view="dashboard">
+          <i class="fas fa-chart-pie"></i> Dashboard
+        </button>
+        <button class="nav-btn" data-view="students">
+          <i class="fas fa-users"></i> Students
+        </button>
+        <button class="nav-btn" data-view="add">
+          <i class="fas fa-user-plus"></i> Add Student
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ======== MAIN ======== -->
+  <main class="main">
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="toast hidden"></div>
+
+    <!-- ---- DASHBOARD VIEW ---- -->
+    <section id="view-dashboard" class="view active">
+      <h2 class="section-title">Dashboard</h2>
+      <div class="stats-grid">
+        <div class="stat-card" style="--accent:#6c63ff">
+          <i class="fas fa-users stat-icon"></i>
+          <div>
+            <p class="stat-label">Total Students</p>
+            <p class="stat-value" id="stat-total">0</p>
+          </div>
+        </div>
+        <div class="stat-card" style="--accent:#43c6ac">
+          <i class="fas fa-star stat-icon"></i>
+          <div>
+            <p class="stat-label">Avg GPA</p>
+            <p class="stat-value" id="stat-gpa">0.00</p>
+          </div>
+        </div>
+        <div class="stat-card" style="--accent:#f7971e">
+          <i class="fas fa-book stat-icon"></i>
+          <div>
+            <p class="stat-label">Courses</p>
+            <p class="stat-value" id="stat-courses">0</p>
+          </div>
+        </div>
+        <div class="stat-card" style="--accent:#e84393">
+          <i class="fas fa-chart-bar stat-icon"></i>
+          <div>
+            <p class="stat-label">Top GPA</p>
+            <p class="stat-value" id="stat-top">0.00</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-section">
+        <h3>Students per Course</h3>
+        <div id="bar-chart" class="bar-chart"></div>
+      </div>
+
+      <div class="recent-section">
+        <h3>Recent Students</h3>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Name</th><th>Course</th><th>GPA</th><th>Age</th>
+            </tr>
+          </thead>
+          <tbody id="recent-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ---- STUDENTS VIEW ---- -->
+    <section id="view-students" class="view">
+      <div class="view-header">
+        <h2 class="section-title">All Students</h2>
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="search-input" placeholder="Search by name or course…" />
+        </div>
+      </div>
+
+      <div id="student-cards" class="cards-grid"></div>
+      <p id="no-results" class="no-results hidden">No students found.</p>
+    </section>
+
+    <!-- ---- ADD / EDIT VIEW ---- -->
+    <section id="view-add" class="view">
+      <h2 class="section-title" id="form-title">Add New Student</h2>
+      <form id="student-form" class="form-card" novalidate>
+        <input type="hidden" id="student-id" />
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="f-name">Full Name <span class="required">*</span></label>
+            <input type="text" id="f-name" placeholder="e.g. Alice Johnson" required />
+            <span class="field-error" id="err-name"></span>
+          </div>
+          <div class="form-group">
+            <label for="f-email">Email <span class="required">*</span></label>
+            <input type="email" id="f-email" placeholder="alice@email.com" required />
+            <span class="field-error" id="err-email"></span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="f-course">Course <span class="required">*</span></label>
+            <select id="f-course" required>
+              <option value="">— select course —</option>
+              <option>Computer Science</option>
+              <option>Mathematics</option>
+              <option>Physics</option>
+              <option>Engineering</option>
+              <option>Biology</option>
+              <option>Chemistry</option>
+              <option>History</option>
+              <option>Art</option>
+              <option>Drama</option>
+              <option>Other</option>
+            </select>
+            <span class="field-error" id="err-course"></span>
+          </div>
+          <div class="form-group">
+            <label for="f-age">Age <span class="required">*</span></label>
+            <input type="number" id="f-age" placeholder="18" min="16" max="80" required />
+            <span class="field-error" id="err-age"></span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="f-gpa">GPA (0 – 4.0) <span class="required">*</span></label>
+            <input type="number" id="f-gpa" placeholder="3.5" min="0" max="4" step="0.01" required />
+            <span class="field-error" id="err-gpa"></span>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="submit-btn">
+            <i class="fas fa-save"></i> Save Student
+          </button>
+          <button type="button" class="btn btn-secondary" id="cancel-btn">
+            <i class="fas fa-times"></i> Cancel
+          </button>
+        </div>
+      </form>
+    </section>
+
+  </main>
+
+  <!-- ======== DELETE MODAL ======== -->
+  <div id="modal-overlay" class="modal-overlay hidden">
+    <div class="modal">
+      <i class="fas fa-exclamation-triangle modal-icon"></i>
+      <h3>Delete Student?</h3>
+      <p id="modal-msg">This action cannot be undone.</p>
+      <div class="modal-actions">
+        <button class="btn btn-danger"  id="modal-confirm">Delete</button>
+        <button class="btn btn-secondary" id="modal-cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
